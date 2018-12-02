@@ -24,7 +24,8 @@ class MainController extends Controller
             "text" => $messageText
         ]
     ];
-    $ch = curl_init('https://graph.facebook.com/v3.2/me/messages?access_token=' .'EAAHSVKcYsSgBAIU6NIHNDyyzEZB8gZCCZAytdDjXTxZBZCeCdt63yp32ZAOQ1sG1S3EO3cq4a7pBZBs3ZBX1PUaTAllZBU7LWvdM4v0LvkWaQI972TZBVqxph8MNntEuEMW1xp4cOdJpnY0xXWtZCV39D35CwYfM9JcZBgSWfaXdzuukdv12DTB8liIf');
+
+    $ch = curl_init("https://graph.facebook.com/v3.2/me?messages%3Faccess_token=EAAHSVKcYsSgBAIU6NIHNDyyzEZB8gZCCZAytdDjXTxZBZCeCdt63yp32ZAOQ1sG1S3EO3cq4a7pBZBs3ZBX1PUaTAllZBU7LWvdM4v0LvkWaQI972TZBVqxph8MNntEuEMW1xp4cOdJpnY0xXWtZCV39D35CwYfM9JcZBgSWfaXdzuukdv12DTB8liIf&access_token=EAAHSVKcYsSgBAAUn96qEfIArwaenPicZAmseVgVwsXaeB6oZA8wrTSrCZAtvvxPif2500zJ7eJMWyeZClak8y0RfSbNLx1xs44Y152mq1yVsNdMlTtDZCLHGOsHBUDzWFhI1eqB8MdATFIxnCCC3WSLjOUZAO44aM59q8fpE5AemaIydXrSZBEMrhHlu2pFWe0ZD");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HEADER, false);
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
