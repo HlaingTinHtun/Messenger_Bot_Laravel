@@ -40,9 +40,9 @@ class BotHandler implements ShouldQueue
             $custom = $bot->extractDataFromMessage();
             //a request for a new question
             if ($custom["type"] == Trivia::NEW_QUESTION) {
-                $bot->reply(Trivia::getNew($custom['user_id']));
+                $bot->reply(Trivia::getNew());
             } else if ($custom["type"] == Trivia::ANSWER) {
-                $bot->reply(Trivia::checkAnswer($custom["data"]["answer"], $custom['user_id']));
+                $bot->reply(Trivia::checkAnswer($custom["data"]["answer"]));
             } else {
                 $bot->reply("I don't understand. Try \"new\" for a new question");
             }

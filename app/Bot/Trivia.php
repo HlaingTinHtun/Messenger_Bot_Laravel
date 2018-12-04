@@ -2,6 +2,7 @@
 namespace App\Bot;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class Trivia
 {
@@ -11,8 +12,7 @@ class Trivia
     public $question;
     public $options;
     private $solution;
-    private $userId;
-    public function __construct(array $data, $userId)
+    public function __construct(array $data)
     {
         $this->question = $data["question"];
         $answer = $data["correct_answer"];
@@ -20,12 +20,11 @@ class Trivia
         $this->options[] = $answer;
         shuffle($this->options); //shuffle the options, so we don't always present the right answer at a fixed place
         $this->solution = $answer;
-        $this->userId = $userId;
     }
-    public static function getNew($userId)
+    public static function getNew()
     {
         //clear any past solutions for this user left in the cache
-        Cache::forget("solution.$userId");
+        Cache::forget("solution");
 
         //make API call and decode result to get general-knowledge trivia question
         $ch = curl_init("https://opentdb.com/api.php?amount=1&category=9&type=multiple");
@@ -34,7 +33,7 @@ class Trivia
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $result = json_decode(curl_exec($ch), true)["results"][0];
 
-        return new Trivia($result, $userId);
+        return new Trivia($result);
     }
     public function toMessage()
     {
@@ -44,22 +43,22 @@ class Trivia
         foreach ($this->options as $i => $option) {
             $response.= "\n{$letters[$i]}: $option";
             if($this->solution == $option) {
-                Cache::forever("solution.{$this->userId}", $letters[$i]);
+                Cache::forever("solution", $letters[$i]);
             }
         }
         return ["text" => $response];
     }
 
-    public static function checkAnswer($answer, $userId)
+    public static function checkAnswer($answer)
     {
-        $solution = Cache::get("solution.$userId");
+        $solution = Cache::get("solution");
         if ($solution == strtolower($answer)) {
             $response = "Correct!";
         } else {
             $response = "Wrong. Correct answer is $solution";
         }
         //clear solution
-        Cache::forget("solution.$userId");
+        Cache::forget("solution");
         return $response;
     }
 }

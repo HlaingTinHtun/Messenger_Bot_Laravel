@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Bot\Webhook\Entry;
+use App\Jobs\BotHandler;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -12,11 +14,11 @@ class MainController extends Controller
       // //get the user’s id
       // $id = $data["entry"][0]["messaging"][0]["sender"]["id"];
       // $this->sendTextMessage($id, "Hi Dear");
-      $entries = \App\Bot\Webhook\Entry::getEntries($request);
+      $entries = Entry::getEntries($request);
       foreach ($entries as $entry) {
           $messagings = $entry->getMessagings();
           foreach ($messagings as $messaging) {
-              dispatch(new \App\Jobs\BotHandler($messaging));
+              dispatch(new BotHandler($messaging));
           }
       }
       return response();
