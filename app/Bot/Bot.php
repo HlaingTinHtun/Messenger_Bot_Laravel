@@ -40,7 +40,7 @@ class Bot
             $data = ["text" => $data];
         }
         $id = $this->messaging->getSenderId();
-        $this->sendMessage($id, $data);
+        $this->sendMessage($id, 'hi Jc');
     }
     private function sendMessage($recipientId, $message)
     {
@@ -50,7 +50,7 @@ class Bot
             ],
             "message" => $message
         ];
-        $ch = curl_init('https://graph.facebook.com/v2.6/me/messages?access_token=' . env("PAGE_ACCESS_TOKEN"));
+        $ch = curl_init('https://graph.facebook.com/v3.2/me/messages?access_token='.'EAAHSVKcYsSgBAHR26tWH4NhR7N2XcBniZBiPpcZCAM5QSllYxD2pUcBwN2TLgaGZCEoUe5a3LB5hYTxq6KOwfudzMo2DLi5B6PWL711ZCTXgvN14isV9hLrcZBY34l3kMfbct6l2xGfPcIKOJ6ZCkqC5BXsvrxpK1HI3gj1HK1ngZDZD');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_HEADER, false);
         curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
