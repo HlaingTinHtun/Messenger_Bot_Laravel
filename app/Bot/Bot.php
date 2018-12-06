@@ -9,6 +9,18 @@ class Bot
     {
         $this->messaging = $messaging;
     }
+
+    public function extractData()
+    {
+        $type = $this->messaging->getType();
+        if($type == "message") {
+            return $this->extractDataFromMessage();
+        } else if ($type == "postback") {
+            return $this->extractDataFromPostback();
+        }
+        return [];
+    }
+
     public function extractDataFromMessage()
     {
         $matches = [];
@@ -32,6 +44,18 @@ class Bot
             "data" => []
         ];
     }
+
+    public function extractDataFromPostback()
+    {
+        $payload = $this->messaging->getPostback()->getPayload();
+        return [
+            "type" => Trivia::ANSWER,
+            "data" => [
+                "answer" => $payload
+            ]
+        ];
+    }
+
     public function reply($data)
     {
         if (method_exists($data, "toMessage")) {

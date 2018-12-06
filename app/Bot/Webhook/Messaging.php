@@ -12,7 +12,12 @@ class Messaging
     private $timestamp;
     private $message;
     private $type;
+    private $postback;
 
+    /**
+     * Messaging constructor.
+     * @param array $data
+     */
     public function __construct(array $data)
     {
         $this->senderId = $data["sender"]["id"];
@@ -21,6 +26,9 @@ class Messaging
         if(isset($data["message"])) {
             $this->type = "message";
             $this->message = new Message($data["message"]);
+        } else if (isset($data["postback"])) {
+            $this->type = "postback";
+            $this->postback = new Postback($data["postback"]);
         }
     }
 
@@ -47,6 +55,14 @@ class Messaging
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * @return Postback
+     */
+    public function getPostback()
+    {
+        return $this->postback;
     }
 
 }
