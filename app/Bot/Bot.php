@@ -100,4 +100,20 @@ class Bot
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($messageData));
         Log::info(print_r(curl_exec($ch), true));
     }
+
+    public function sendWelcomeMessage()
+    {
+        $name = $this->getUserDetails()["first_name"];
+        $this->reply("Hi $name! Welcome to Zech Bot! You can type \"new\" to get a new question, but why don’t we start with this one?");
+    }
+
+    private function getUserDetails()
+    {
+        $id = $this->messaging->getSenderId();
+        $ch = curl_init("https://graph.facebook.com/v3.2/$id?access_token=" .'EAAHSVKcYsSgBAHR26tWH4NhR7N2XcBniZBiPpcZCAM5QSllYxD2pUcBwN2TLgaGZCEoUe5a3LB5hYTxq6KOwfudzMo2DLi5B6PWL711ZCTXgvN14isV9hLrcZBY34l3kMfbct6l2xGfPcIKOJ6ZCkqC5BXsvrxpK1HI3gj1HK1ngZDZD');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HEADER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
+        return json_decode(curl_exec($ch), true);
+    }
 }
