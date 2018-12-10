@@ -24,7 +24,12 @@ class Bot
     public function extractDataFromMessage()
     {
         $matches = [];
-        $text = $this->messaging->getMessage()->getText();
+        $qr = $this->messaging->getMessage()->getQuickReply();
+        if (!empty($qr)) {
+            $text = $qr["payload"];
+        } else {
+            $text = $this->messaging->getMessage()->getText();
+        }
         //single letter message means an answer
         if (preg_match("/^(\\w)\$/i", $text, $matches)) {
             return [
