@@ -53,11 +53,24 @@ class Bot
     public function extractDataFromPostback()
     {
         $payload = $this->messaging->getPostback()->getPayload();
+        //is it an answer to a question
+        if (preg_match("/^(\\w)\$/i", $payload)){
+            return [
+                "type" => Trivia::ANSWER,
+                "data" => [
+                    "answer" => $payload
+                ]
+            ];
+            //or a Get Started button click?
+        } else if ($payload === "get-started") {
+            return [
+                "type" => "get-started",
+                "data" => []
+            ];
+        }
         return [
-            "type" => Trivia::ANSWER,
-            "data" => [
-                "answer" => $payload
-            ]
+            "type" => "unknown",
+            "data" => []
         ];
     }
 
